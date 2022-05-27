@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -16,25 +17,45 @@
   <body>
     <input type="file" id="files" name="files[]" multiple />
     <output id="list"></output>
-    <div id="demo" class="box">
-      <a class="head">NOME</a><a class="head">VALOR DA NOTA</a><a class="head">VALOR PAGO</a>
-      <a>TOTAIS</a><a id="TotalNotas">R$ 0,00</a><a id="TotalPago">R$ 0,00</a>
-    </div>
     <table>
       <tr>
-        <th><a>NOME</a></th>
-        <th><a>VALOR DA NOTA</a></th>
-        <th><a>VALOR TOTAL</a></th>
+        <th style="min-width: 10em;"><a>CNPJ</a></th>
+        <th style="min-width: 20em;"><a>NOME</a></th>
+        <th style="min-width: 10em;"><a>IE</a></th>
+        <th style="min-width: 10em;"><a>E-MAIL</a></th>
+        <th style="min-width: 10em;"><a>TELEFONE</a></th>
+        <th style="min-width: 20em;"><a>ENDEREÇO</a></th>
+        <th style="min-width: 10em;"><a>BAIRRO</a></th>
+        <th style="min-width: 10em;"><a>MUNICÍPIO</a></th>
+        <th style="min-width: 10em;"><a>CEP</a></th>
+        <th style="min-width: 10em;"><a>UF</a></th>
+        <th style="min-width: 10em;"><a>NÚMERO</a></th>
+        <th style="min-width: 10em;"><a>Data Emissão</a></th>
+        <th style="min-width: 10em;"><a>Data Saída</a></th>
+        <th style="min-width: 10em;"><a>VALOR NOTA</a></th>
+        <th style="min-width: 10em;"><a>VALOR PAGO</a></th>
       </tr>
       <tr id="totais" class="linha">
-        <td><a>TOTAIS</a></td>
-        <td><a>R$ 0,00</a></td>
-        <td><a>R$ 0,00</a></td>
+        <td colspan="13"><a>TOTAIS</a></td>
+        <td><a id="TotalNotas">R$ 0,00</a></td>
+        <td><a id="TotalPago">R$ 0,00</a></td>
       </tr>
-      <tr id="modeloLinha" class="linha" style="display: none;" >
-        <td><a></a></td>
-        <td><a></a></td>
-        <td><a></a></td>
+      <tr id="modeloLinha" class="linha" style="display: none;">
+        <td><a class="cnpj"></a></td>
+        <td><a class="nome"></a></td>
+        <td><a class="ie"></a></td>
+        <td><a class="email"></a></td>
+        <td><a class="telefone"></a></td>
+        <td><a class="endereco"></a></td>
+        <td><a class="bairro"></a></td>
+        <td><a class="municipio"></a></td>
+        <td><a class="cep"></a></td>
+        <td><a class="uf"></a></td>
+        <td><a class="numero"></a></td>
+        <td><a class="dataEmi"></a></td>
+        <td><a class="dataSai"></a></td>
+        <td><a class="valorNota"></a></td>
+        <td><a class="valorPago"></a></td>
       </tr>
     </table>
   </body>
