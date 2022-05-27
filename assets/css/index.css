@@ -1,0 +1,74 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+	padding: 0 10px;
+	font-family: 'Open Sans', sans-serif;
+}
+
+body > div{
+    margin: 10px 0px;
+}
+
+.box{
+    display: grid;
+    grid-template-columns: 50% 25% 25%;
+    margin-top: 5px;
+    padding: 5px;
+
+    border: solid 2px gray;
+    border-radius: 5px;
+}
+
+.box a:nth-child(3n), .box a:nth-child(3n-1){
+    text-align: right;
+}
+
+.box a.head{
+    text-align: center;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+
+.box a:nth-child(3n-2){
+    border-left: solid 1px;
+}
+
+.box a:nth-child(6n-2), .box a:nth-child(6n-1), .box a:nth-child(6n){
+    background-color: rgb(247, 242, 242);
+}
+
+.box a{
+    border-right: solid 1px;
+    border-bottom: solid 1px;
+    padding: 0 5px;
+}
+
+.result{
+	margin-top: 2px;
+	border-top: solid 1px grey;
+}
+
+input, button {
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+input.erro{
+	background-color: rgba(237,67,55,0.5)
+}
+
+.rowMovie{
+	display: flex;
+    	justify-content: space-between;
+	border: solid 2px grey;
+    	padding: 5px;
+    	border-radius: 5px;
+	margin: 5px 0;
+}
