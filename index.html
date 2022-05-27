@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta http-equiv="Content-Type" content="text/html;" charset=utf-8?>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="./assets/js/index.js" defer></script>
-  <link rel="stylesheet" href="./assets/css/index.css">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
-</style>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
-</style>
-  <title>Extrair dados XML</title>
-</head>
-<body>
-<input type="file" id="files" name="files[]" multiple />
-<output id="list"></output>
-<div id="demo" class="box">
-  <a class="head">NOME</a><a class="head">VALOR DA NOTA</a><a class="head">VALOR PAGO</a>
-  <a>TOTAIS</a><a id="TotalNotas">R$ 0,00</a><a id="TotalPago">R$ 0,00</a>
-</div>
-</body>
+    <script src="./assets/js/index.js" defer></script>
+    <link rel="stylesheet" href="./assets/css/index.css">
+
+    <style> @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');</style>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');</style>
+    
+    <title>Extrair dados XML</title>
+  </head>
+  <body>
+    <input type="file" id="files" name="files[]" multiple />
+    <output id="list"></output>
+    <div id="demo" class="box">
+      <a class="head">NOME</a><a class="head">VALOR DA NOTA</a><a class="head">VALOR PAGO</a>
+      <a>TOTAIS</a><a id="TotalNotas">R$ 0,00</a><a id="TotalPago">R$ 0,00</a>
+    </div>
+    <table>
+      <tr>
+        <th><a>NOME</a></th>
+        <th><a>VALOR DA NOTA</a></th>
+        <th><a>VALOR TOTAL</a></th>
+      </tr>
+      <tr id="totais" class="linha">
+        <td><a>TOTAIS</a></td>
+        <td><a>R$ 0,00</a></td>
+        <td><a>R$ 0,00</a></td>
+      </tr>
+      <tr id="modeloLinha" class="linha" style="display: none;" >
+        <td><a></a></td>
+        <td><a></a></td>
+        <td><a></a></td>
+      </tr>
+    </table>
+  </body>
 </html>
