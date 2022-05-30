@@ -6,10 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="./assets/js/index.js" defer></script>
-    <link rel="stylesheet" href="./assets/css/index.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/img/favicon-16x16.png">
 
-    <style> @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');</style>
+    <link rel="stylesheet" href="./assets/css/index.css">
+    <script src="./assets/js/index.js" defer></script>
+
+    <style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');</style>
     <style>@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');</style>
     
     <title>Extrair dados XML</title>
@@ -17,6 +20,10 @@
   <body>
     <input type="file" id="files" name="files[]" multiple />
     <output id="list"></output>
+    <div class="boxSelect">
+      <div class="icon_col"></div>
+      <div class="boxMenu" style="display: none;"></div>
+  </div>
     <table>
       <tr>
         <th style="min-width: 10em;"><a>CNPJ</a></th>
@@ -32,13 +39,13 @@
         <th style="min-width: 10em;"><a>NÚMERO</a></th>
         <th style="min-width: 10em;"><a>Data Emissão</a></th>
         <th style="min-width: 10em;"><a>Data Saída</a></th>
+        <th style="min-width: 10em;"><a>Quantidade</a></th>
+        <th style="min-width: 10em;"><a>Espécie</a></th>
+        <th style="min-width: 10em;"><a>Produto</a></th>
+        <th style="min-width: 10em;"><a>Indicador da Forma de Pagamento</a></th>
+        <th style="min-width: 10em;"><a>Meio de pagamento</a></th>
         <th style="min-width: 10em;"><a>VALOR NOTA</a></th>
         <th style="min-width: 10em;"><a>VALOR PAGO</a></th>
-      </tr>
-      <tr id="totais" class="linha">
-        <td colspan="13"><a>TOTAIS</a></td>
-        <td><a id="TotalNotas">R$ 0,00</a></td>
-        <td><a id="TotalPago">R$ 0,00</a></td>
       </tr>
       <tr id="modeloLinha" class="linha" style="display: none;">
         <td><a class="cnpj"></a></td>
@@ -54,9 +61,19 @@
         <td><a class="numero"></a></td>
         <td><a class="dataEmi"></a></td>
         <td><a class="dataSai"></a></td>
+        <td><a class="qVol"></a></td>
+        <td><a class="esp"></a></td>
+        <td><a class="produto"></a></td>
+        <td><a class="indPag"></a></td>
+        <td><a class="tPag"></a></td>
         <td><a class="valorNota"></a></td>
         <td><a class="valorPago"></a></td>
       </tr>
+      <!--tr id="totais" class="linha">
+        <td colspan="13"><a>TOTAIS</a></td>
+        <td><a id="TotalNotas">R$ 0,00</a></td>
+        <td><a id="TotalPago">R$ 0,00</a></td>
+      </tr-->
     </table>
   </body>
 </html>
