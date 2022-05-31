@@ -35,8 +35,50 @@ body{
 	font-family: 'Open Sans', sans-serif;
 }
 
-body > div{
+body h2{
     margin: 10px 0px;
+    text-align: center;
+}
+
+.box{
+    display: grid;
+    grid-template-columns: 50% 25% 25%;
+    margin-top: 5px;
+    padding: 5px;
+
+    border: solid 2px gray;
+    border-radius: 5px;
+}
+
+.box a:nth-child(3n), .box a:nth-child(3n-1){
+    text-align: right;
+}
+
+.box a.head{
+    text-align: center;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+
+.box a:nth-child(3n-2){
+    border-left: solid 1px;
+}
+
+.box a:nth-child(6n-2), .box a:nth-child(6n-1), .box a:nth-child(6n){
+    background-color: rgb(247, 242, 242);
+}
+
+.box a{
+    border-right: solid 1px;
+    border-bottom: solid 1px;
+    padding: 0 5px;
+}
+
+.result{
+	margin-top: 2px;
+	border-top: solid 1px grey;
 }
 
 input, button {
@@ -47,6 +89,15 @@ input, button {
 
 input.erro{
 	background-color: rgba(237,67,55,0.5)
+}
+
+.rowMovie{
+	display: flex;
+    	justify-content: space-between;
+	border: solid 2px grey;
+    	padding: 5px;
+    	border-radius: 5px;
+	margin: 5px 0;
 }
 
 
@@ -161,11 +212,7 @@ table .colTexto a{
     width: 1em;
     height: 1em;
     min-width: 1em;
-    background-image: url("../img/svg/table.svg");
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
+    background-image: url(../img/svg/tableColumnsSolid.svg);
 }
 
 .boxSelect .boxMenu{
@@ -247,3 +294,82 @@ table .colTexto a{
     background-color: #ffffff;
     outline: none;
 }
+
+/* From uiverse.io by @barisdogansutcu */
+.download-button {
+    position: relative;
+    border-width: 0;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 0;
+    z-index: 1;
+   }
+   
+   .download-button .docs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 40px;
+    padding: 0 10px;
+    border-radius: 4px;
+    z-index: 1;
+    background-color: #242a35;
+    border: solid 1px #e8e8e82d;
+    transition: all .5s cubic-bezier(0.77, 0, 0.175, 1);
+   }
+   
+   .download-button:hover {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+   }
+   
+   .download {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 90%;
+    margin: 0 auto;
+    z-index: -1;
+    border-radius: 4px;
+    transform: translateY(0%);
+    background-color: #01e056;
+    border: solid 1px #01e0572d;
+    transition: all .5s cubic-bezier(0.77, 0, 0.175, 1);
+   }
+   
+   .download-button .download a{
+    cursor: pointer;
+    width: 1em;
+    height: 2em;
+    min-width: 1em;
+    background-image: url(../img/svg/file-arrow-down-solid.svg);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+   }
+   
+   .download-button:hover .download {
+    transform: translateY(100%)
+   }
+   
+   .download svg polyline,.download svg line {
+    animation: docs 1s infinite;
+   }
+   
+   @keyframes docs {
+    0% {
+     transform: translateY(0%);
+    }
+   
+    50% {
+     transform: translateY(-15%);
+    }
+   
+    100% {
+     transform: translateY(0%);
+    }
+   }

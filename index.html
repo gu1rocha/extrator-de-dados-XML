@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -10,6 +9,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/img/favicon-16x16.png">
 
     <link rel="stylesheet" href="./assets/css/index.css">
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script src="./assets/js/index.js" defer></script>
 
     <style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');</style>
@@ -19,12 +19,12 @@
   </head>
   <body>
     <input type="file" id="files" name="files[]" multiple />
-    <output id="list"></output>
-    <div class="boxSelect">
+    <h2>Notas Fiscais</h2>
+    <div class="boxSelect" id="boxSelectForTableNotas">
       <div class="icon_col"></div>
       <div class="boxMenu" style="display: none;"></div>
-  </div>
-    <table>
+    </div>
+    <table id="notasFiscais">
       <tr>
         <th style="min-width: 10em;"><a>CNPJ</a></th>
         <th style="min-width: 20em;"><a>NOME</a></th>
@@ -36,14 +36,14 @@
         <th style="min-width: 10em;"><a>MUNICÍPIO</a></th>
         <th style="min-width: 10em;"><a>CEP</a></th>
         <th style="min-width: 10em;"><a>UF</a></th>
-        <th style="min-width: 10em;"><a>NÚMERO</a></th>
-        <th style="min-width: 10em;"><a>Data Emissão</a></th>
-        <th style="min-width: 10em;"><a>Data Saída</a></th>
-        <th style="min-width: 10em;"><a>Quantidade</a></th>
-        <th style="min-width: 10em;"><a>Espécie</a></th>
-        <th style="min-width: 10em;"><a>Produto</a></th>
-        <th style="min-width: 10em;"><a>Indicador da Forma de Pagamento</a></th>
-        <th style="min-width: 10em;"><a>Meio de pagamento</a></th>
+        <th style="min-width: 10em;"><a>NOTA FISCAL</a></th>
+        <th style="min-width: 10em;"><a>DATA EMISSÃO</a></th>
+        <th style="min-width: 10em;"><a>DATA SAÍDA</a></th>
+        <th style="min-width: 10em;"><a>QUANTIDADE</a></th>
+        <th style="min-width: 10em;"><a>ESPÉCIE</a></th>
+        <th style="min-width: 10em; display: none;"><a>PRODUTO</a></th>
+        <th style="min-width: 10em;"><a>INDICADOR FORMA PAGAMENTO</a></th>
+        <th style="min-width: 10em;"><a>MEIO PAGAMENTO</a></th>
         <th style="min-width: 10em;"><a>VALOR NOTA</a></th>
         <th style="min-width: 10em;"><a>VALOR PAGO</a></th>
       </tr>
@@ -63,17 +63,46 @@
         <td><a class="dataSai"></a></td>
         <td><a class="qVol"></a></td>
         <td><a class="esp"></a></td>
-        <td><a class="produto"></a></td>
+        <td style="display: none;"><a class="produto"></a></td>
         <td><a class="indPag"></a></td>
         <td><a class="tPag"></a></td>
         <td><a class="valorNota"></a></td>
         <td><a class="valorPago"></a></td>
       </tr>
-      <!--tr id="totais" class="linha">
-        <td colspan="13"><a>TOTAIS</a></td>
-        <td><a id="TotalNotas">R$ 0,00</a></td>
-        <td><a id="TotalPago">R$ 0,00</a></td>
-      </tr-->
     </table>
+    <button class="download-button">
+      <div class="docs">EXPORTAR TABELA</div>
+      <div class="download"><a></a></div>
+    </button>
+
+    <h2>Notas Fiscais Canceladas</h2>
+    <div class="boxSelect" id="boxSelectForCanceladas">
+      <div class="icon_col"></div>
+      <div class="boxMenu canceladas" style="display: none;"></div>
+    </div>
+    <table id="canceladas">
+      <tr>
+        <th style="min-width: 10em;"><a>ID EVENTO</a></th>
+        <th style="min-width: 10em;"><a>DATA CRIAÇÃO</a></th>
+        <th style="min-width: 10em;"><a>PROTOCOLO</a></th>
+        <th style="min-width: 10em;"><a>CNPJ DESTINATÁRIO</a></th>
+        <th style="min-width: 10em;"><a>NOTA FISCAL</a></th>
+        <th style="min-width: 10em;"><a>SÉRIE</a></th>
+        <th style="min-width: 20em;"><a>JUSTIFICATIVA CANCELAMENTO</a></th>
+      </tr>
+      <tr id="modeloLinha" class="linha" style="display: none;">
+        <td><a class="IDEvento"></a></td>
+        <td><a class="dhEvento"></a></td>
+        <td><a class="nProt"></a></td>
+        <td><a class="cnpj"></a></td>
+        <td><a class="nota"></a></td>
+        <td><a class="serie"></a></td>
+        <td><a class="xJust"></a></td>
+      </tr>
+    </table>
+    <button class="download-button">
+      <div class="docs">EXPORTAR TABELA</div>
+      <div class="download"><a></a></div>
+    </button>
   </body>
 </html>

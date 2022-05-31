@@ -2,9 +2,12 @@ var demo = document.querySelector('#demo');
 
 var TotalNotas = document.querySelector('#TotalNotas');
 var TotalPago = document.querySelector('#TotalPago');
-let tabela = document.querySelector('table');
-let boxSelect = document.querySelector('.boxSelect');
-var modeloLinha = document.querySelector('#modeloLinha');
+let tabNotas = document.querySelector('#notasFiscais');
+let tabCanceladas = document.querySelector('#canceladas');
+let boxSelectNotas = document.querySelector('#boxSelectForTableNotas');
+let boxSelectCanceladas = document.querySelector('#boxSelectForCanceladas');
+let modeloLinhaNota = tabNotas.querySelector('#modeloLinha');
+let modeloLinhaCancela = tabCanceladas.querySelector('#modeloLinha');
 
 let atualizarTotal = (valor,local) =>{
   local.innerHTML = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
@@ -43,7 +46,6 @@ let dateTimeToUTC = date =>{
 
 function handleFileSelect(evt) {
   var files = evt.target.files;
-	let totalPago = 0, totalNotas = 0;
 
   for (var i = 0, f; f = files[i]; i++) {
     var reader = new FileReader();
@@ -57,11 +59,10 @@ function handleFileSelect(evt) {
         var xmlDoc = parser.parseFromString(span.innerText,"text/xml");
 
         if(!!xmlDoc.getElementsByTagName("xNome")[1]){
-
-          let clone = modeloLinha.cloneNode(true);
+          let clone = modeloLinhaNota.cloneNode(true);
           clone.removeAttribute('id');
           clone.removeAttribute('style');
-          tabela.querySelector('tbody').appendChild(clone)
+          tabNotas.querySelector('tbody').appendChild(clone)
 
           let dataEmi = "";
           if(!!xmlDoc.getElementsByTagName("dhEmi")[0]){
@@ -77,7 +78,7 @@ function handleFileSelect(evt) {
 
           let cnpj = "";
           if(!!destinatario.getElementsByTagName("CNPJ")[0]){
-            cnpj = destinatario.getElementsByTagName("CNPJ")[0].textContent;
+            cnpj = destinatario.getElementsByTagName("CNPJ")[0].textContent.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
           }
 
           let nome = destinatario.getElementsByTagName("xNome")[0].textContent;
@@ -99,10 +100,10 @@ function handleFileSelect(evt) {
           let bairro = endereco.getElementsByTagName("xBairro")[0].textContent;
           let municipio = endereco.getElementsByTagName("xMun")[0].textContent;
           let uf = endereco.getElementsByTagName("UF")[0].textContent;
-
-          let cep = ""
-          if(!!destinatario.getElementsByTagName("CEP")[0]){
-            cep = destinatario.getElementsByTagName("CEP")[0].textContent;
+          
+          let cep = "";
+          if(!!endereco.getElementsByTagName("CEP")[0]){
+            cep = endereco.getElementsByTagName("CEP")[0].textContent;
           }
 
           let ie = ""
@@ -114,12 +115,15 @@ function handleFileSelect(evt) {
           if(!!endereco.getElementsByTagName("xCpl")[0]){
             xpl = `- ${endereco.getElementsByTagName("xCpl")[0].textContent}`
           }
-          
-          let nNF = xmlDoc.getElementsByTagName("nNF")[0].textContent;
+
+          let nNF = xmlDoc.getElementsByTagName("infNFe")[0].getAttributeNode("Id").value.replace("ID","").slice(28, 37);
+          clone.dataset.nf = nNF;
+
+          nNF = nNF.replace(/^(\d{3})(\d{3})(\d{3})/, "$1.$2.$3")
 
           let produto = []
           for(let det of xmlDoc.getElementsByTagName("det"))
-          produto.push(`${det.getElementsByTagName("cProd")[0].textContent} ${det.getElementsByTagName("xProd")[0].textContent} ${det.getElementsByTagName("qCom")[0].textContent}`)
+          produto.push(`${det.getElementsByTagName("cProd")[0].textContent} ${det.getElementsByTagName("xProd")[0].textContent} ${det.getElementsByTagName("qCom")[0].textContent}; `)
 
           let detalhesPagamento = xmlDoc.getElementsByTagName("detPag")[0]
           let indPagtext = ''; let tPagtext = '';
@@ -166,11 +170,37 @@ function handleFileSelect(evt) {
           clone.querySelector('.indPag').innerHTML = indPagtext;
           clone.querySelector('.tPag').innerHTML = tPagtext;
 
-          totalNotas = totalNotas + parseFloat(valorNota);
-          totalPago = totalPago + parseFloat(valorPago);
+        }else if(!!xmlDoc.getElementsByTagName("procEventoNFe")[0]){
 
-          //atualizarTotal(Number(totalNotas),TotalNotas)
-          //atualizarTotal(Number(totalPago),TotalPago)
+          let IDEvento = xmlDoc.getElementsByTagName("infEvento")[0].getAttributeNode("Id").value.replace("ID","");
+          let CNPJ = xmlDoc.getElementsByTagName("CNPJDest")[0].textContent.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+          let dhEvento = dateTimeToUTC(xmlDoc.getElementsByTagName("dhEvento")[0].textContent);
+          let nProt = xmlDoc.getElementsByTagName("nProt")[0].textContent;
+          let xJust = xmlDoc.getElementsByTagName("xJust")[0].textContent;
+          let nota = IDEvento.slice(31, 40)
+          let serie = IDEvento.slice(28, 31)
+
+          let rows = tabNotas.querySelectorAll('.linha');
+          
+          for(let row of rows){
+            if(nota == row.dataset.nf){
+              row.style.textDecoration = "line-through"
+            }
+          }
+          nota = nota.replace(/^(\d{3})(\d{3})(\d{3})/, "$1.$2.$3")
+
+          let clone = modeloLinhaCancela.cloneNode(true);
+          clone.removeAttribute('id');
+          clone.removeAttribute('style');
+          tabCanceladas.querySelector('tbody').appendChild(clone)
+          
+          clone.querySelector('.IDEvento').innerHTML = IDEvento;
+          clone.querySelector('.dhEvento').innerHTML = dhEvento;
+          clone.querySelector('.nProt').innerHTML = nProt;
+          clone.querySelector('.cnpj').innerHTML = CNPJ;
+          clone.querySelector('.nota').innerHTML = nota;
+          clone.querySelector('.serie').innerHTML = serie;
+          clone.querySelector('.xJust').innerHTML = xJust;
         }
       };
     })(f);
@@ -196,7 +226,7 @@ let removeAddClass = (element, classe) => {
   }
 }
 
-let AppearCol = (tabela,boxSelect,primeiro = true, ultimo = true) => {
+let AppearCol = (tab,boxSelect,primeiro = true, ultimo = true) => {
   let inicio = 1;
   let final = 1;
   
@@ -205,18 +235,18 @@ let AppearCol = (tabela,boxSelect,primeiro = true, ultimo = true) => {
   if(ultimo){ final = 0; }
   
   boxSelect.querySelector('.boxMenu').innerHTML = "";
-  for(let i = inicio; i < tabela.querySelectorAll('th').length - final; i++){
+  for(let i = inicio; i < tab.querySelectorAll('th').length - final; i++){
       let linha = document.createElement('a');
       linha.dataset.ordem = i;
       linha.classList.add('linha');
-      if(tabela.querySelectorAll('th')[i].style.display !== 'none'){
+      if(tab.querySelectorAll('th')[i].style.display !== 'none'){
           linha.classList.add('ativo');
       }
-      linha.textContent = (tabela.querySelectorAll('th')[i].textContent);
+      linha.textContent = (tab.querySelectorAll('th')[i].textContent);
       boxSelect.querySelector('.boxMenu').appendChild(linha);
   }
   btnMenu(boxSelect);
-  ShowHideCol(boxSelect,tabela);
+  ShowHideCol(boxSelect,tab);
 }
 
 let btnMenu = (element) => {
@@ -224,14 +254,18 @@ let btnMenu = (element) => {
     visibleHidden(element.querySelector('.boxMenu'));
   });
 }
-
+let test = document.querySelectorAll('.boxMenu.canceladas')[0].childNodes
 document.addEventListener('mouseup', (e) => {
   let linha = false
-  for( let a of document.querySelector('.boxMenu').querySelectorAll('a')){
+  for(let a of document.querySelector('.boxMenu').querySelectorAll('a')){
     if(a === e.target) linha = true
   }
-  if(document.querySelector('.icon_col') !== e.target && document.querySelector('.boxMenu') !== e.target && document.querySelector('.boxMenu').style.display !== 'none' && !linha){
-    document.querySelector('.boxMenu').style.display = 'none'
+  for(let a of document.querySelectorAll('.boxMenu.canceladas')[0].childNodes){
+    if(a === e.target) linha = true
+  }
+  if(document.querySelectorAll('.icon_col') !== e.target && document.querySelectorAll('.boxMenu') !== e.target && document.querySelector('.boxMenu').style.display !== 'none' || document.querySelectorAll('.boxMenu.canceladas')[0].style.display !== 'none' && !linha){
+    document.querySelector('.boxMenu').style.display = 'none';
+    document.querySelectorAll('.boxMenu.canceladas')[0].style.display = 'none'
   }
 });
 
@@ -249,43 +283,67 @@ let ShowHideCol = (element,tabela) => {
 }
   
 
-AppearCol(tabela,boxSelect,true,true);
+AppearCol(tabNotas,boxSelectNotas,true,true);
+AppearCol(tabCanceladas,boxSelectCanceladas,true,true);
 
+let slide = tabela =>{
+  const slider = tabela
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+  
+  function inicialize(){
+      
+      if (slider === undefined || slider === null) return;
+      
+      slider.addEventListener('mousedown', (e) => {
+          isDown = true;
+          slider.classList.add('active');
+          startX = e.pageX - slider.offsetLeft;
+          scrollLeft = slider.scrollLeft;
+      });
+  
+        slider.addEventListener('mouseleave', () => {
+          isDown = false;
+          slider.classList.remove('active');
+      });
+  
+        slider.addEventListener('mouseup', () => {
+          isDown = false;
+          slider.classList.remove('active');
+      });
+  
+        slider.addEventListener('mousemove', (e) => {
+          if(!isDown) return;
+  
+          e.preventDefault();
+  
+          const x = e.pageX - slider.offsetLeft;
+  
+          const walk = (x - startX) * 1; //scroll-fast
+          slider.scrollLeft = scrollLeft - walk;
+      });
+  } inicialize();
+}
 
-const slider = tabela
-let isDown = false;
-let startX;
-let scrollLeft;
+slide(tabNotas)
+slide(tabCanceladas)
 
-function inicialize(){
-    
-    if (slider === undefined || slider === null) return;
-    
-    slider.addEventListener('mousedown', (e) => {
-        isDown = true;
-        slider.classList.add('active');
-        startX = e.pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
-    });
+function ExportToExcel(type, fn, dl) {
+  var wb = XLSX.utils.table_to_book(tabela, { sheet: "sheet1" });
+  return dl ?
+      XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+      XLSX.writeFile(wb, fn || ('MySheetName.' + (type || 'xlsx')));
+}
 
-      slider.addEventListener('mouseleave', () => {
-        isDown = false;
-        slider.classList.remove('active');
-    });
-
-      slider.addEventListener('mouseup', () => {
-        isDown = false;
-        slider.classList.remove('active');
-    });
-
-      slider.addEventListener('mousemove', (e) => {
-        if(!isDown) return;
-
-        e.preventDefault();
-
-        const x = e.pageX - slider.offsetLeft;
-
-        const walk = (x - startX) * 1; //scroll-fast
-        slider.scrollLeft = scrollLeft - walk;
-    });
-} inicialize();
+let buttons = document.querySelectorAll('button');
+for(let button of buttons){
+  button.addEventListener('click', (element) => {
+    function ExportToExcel(type, fn, dl) {
+    var wb = XLSX.utils.table_to_book(button.previousElementSibling, { sheet: "sheet1" });
+    return dl ?
+        XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+        XLSX.writeFile(wb, fn || ('MySheetName.' + (type || 'xlsx')));
+  } ExportToExcel('xlsx')
+  });
+}
