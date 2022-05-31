@@ -99,7 +99,11 @@ function handleFileSelect(evt) {
           let bairro = endereco.getElementsByTagName("xBairro")[0].textContent;
           let municipio = endereco.getElementsByTagName("xMun")[0].textContent;
           let uf = endereco.getElementsByTagName("UF")[0].textContent;
-          let cep = endereco.getElementsByTagName("CEP")[0].textContent;
+
+          let cep = ""
+          if(!!destinatario.getElementsByTagName("CEP")[0]){
+            cep = destinatario.getElementsByTagName("CEP")[0].textContent;
+          }
 
           let ie = ""
           if(!!destinatario.getElementsByTagName("IE")[0]){
@@ -112,8 +116,10 @@ function handleFileSelect(evt) {
           }
           
           let nNF = xmlDoc.getElementsByTagName("nNF")[0].textContent;
+
+          let produto = []
           for(let det of xmlDoc.getElementsByTagName("det"))
-          console.log(det.getElementsByTagName("cProd")[0].textContent,det.getElementsByTagName("xProd")[0].textContent,det.getElementsByTagName("qCom")[0].textContent)
+          produto.push(`${det.getElementsByTagName("cProd")[0].textContent} ${det.getElementsByTagName("xProd")[0].textContent} ${det.getElementsByTagName("qCom")[0].textContent}`)
 
           let detalhesPagamento = xmlDoc.getElementsByTagName("detPag")[0]
           let indPagtext = ''; let tPagtext = '';
@@ -155,6 +161,7 @@ function handleFileSelect(evt) {
 
           clone.querySelector('.qVol').innerHTML = qVol;
           clone.querySelector('.esp').innerHTML = esp;
+          clone.querySelector('.produto').innerHTML = produto;
 
           clone.querySelector('.indPag').innerHTML = indPagtext;
           clone.querySelector('.tPag').innerHTML = tPagtext;

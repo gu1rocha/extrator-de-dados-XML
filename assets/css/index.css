@@ -39,47 +39,6 @@ body > div{
     margin: 10px 0px;
 }
 
-.box{
-    display: grid;
-    grid-template-columns: 50% 25% 25%;
-    margin-top: 5px;
-    padding: 5px;
-
-    border: solid 2px gray;
-    border-radius: 5px;
-}
-
-.box a:nth-child(3n), .box a:nth-child(3n-1){
-    text-align: right;
-}
-
-.box a.head{
-    text-align: center;
-    font-weight: bold;
-    position: sticky;
-    top: 0;
-    background-color: white;
-}
-
-.box a:nth-child(3n-2){
-    border-left: solid 1px;
-}
-
-.box a:nth-child(6n-2), .box a:nth-child(6n-1), .box a:nth-child(6n){
-    background-color: rgb(247, 242, 242);
-}
-
-.box a{
-    border-right: solid 1px;
-    border-bottom: solid 1px;
-    padding: 0 5px;
-}
-
-.result{
-	margin-top: 2px;
-	border-top: solid 1px grey;
-}
-
 input, button {
     padding: 5px;
     border-radius: 5px;
@@ -88,15 +47,6 @@ input, button {
 
 input.erro{
 	background-color: rgba(237,67,55,0.5)
-}
-
-.rowMovie{
-	display: flex;
-    	justify-content: space-between;
-	border: solid 2px grey;
-    	padding: 5px;
-    	border-radius: 5px;
-	margin: 5px 0;
 }
 
 
@@ -144,6 +94,7 @@ table th a{
     font-size: 1em;
     font-weight: bold;
     color: white;
+    white-space: nowrap;
 }
 
 table .linha{
@@ -169,6 +120,13 @@ table td{
     
     overflow: hidden;
     overflow-wrap: break-word;
+
+    max-width: 25em;
+}
+
+
+table td a{
+    white-space: nowrap;
 }
 
 tr:nth-child(odd) {background: #CCC}
@@ -185,6 +143,7 @@ table .colTexto a{
     font-size: 1.4em;
     line-height: 1.3em;
 }
+
 .boxSelect{
     width: 100%;
     text-align: left;
@@ -202,7 +161,11 @@ table .colTexto a{
     width: 1em;
     height: 1em;
     min-width: 1em;
-    background: transparent url(/assets/img/svg/table-columns-solid.svg) no-repeat center center / contain;
+    background-image: url("../img/svg/table.svg");
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
 }
 
 .boxSelect .boxMenu{
