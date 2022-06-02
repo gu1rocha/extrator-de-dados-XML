@@ -40,64 +40,37 @@ body h2{
     text-align: center;
 }
 
-.box{
-    display: grid;
-    grid-template-columns: 50% 25% 25%;
-    margin-top: 5px;
-    padding: 5px;
-
-    border: solid 2px gray;
-    border-radius: 5px;
+.boxInput{
+    position: relative;
+    max-width: 800px;
+    margin: .5em auto 0 auto;
 }
 
-.box a:nth-child(3n), .box a:nth-child(3n-1){
-    text-align: right;
+input{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 1;
 }
 
-.box a.head{
-    text-align: center;
+label {
+    position: relative;
+    display: flex;
+    height: 5em;
+    justify-content: center;
+    border-radius: 0.5em;
+    border: 0.2em dashed gainsboro;
+    align-items: center;
     font-weight: bold;
-    position: sticky;
-    top: 0;
-    background-color: white;
+    color: #000;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 }
 
-.box a:nth-child(3n-2){
-    border-left: solid 1px;
-}
+label:hover {
+    box-shadow: gainsboro 0 0.5em 0.5em;
 
-.box a:nth-child(6n-2), .box a:nth-child(6n-1), .box a:nth-child(6n){
-    background-color: rgb(247, 242, 242);
-}
-
-.box a{
-    border-right: solid 1px;
-    border-bottom: solid 1px;
-    padding: 0 5px;
-}
-
-.result{
-	margin-top: 2px;
-	border-top: solid 1px grey;
-}
-
-input, button {
-    padding: 5px;
-    border-radius: 5px;
-    margin: 5px 0;
-}
-
-input.erro{
-	background-color: rgba(237,67,55,0.5)
-}
-
-.rowMovie{
-	display: flex;
-    	justify-content: space-between;
-	border: solid 2px grey;
-    	padding: 5px;
-    	border-radius: 5px;
-	margin: 5px 0;
 }
 
 
@@ -212,7 +185,7 @@ table .colTexto a{
     width: 1em;
     height: 1em;
     min-width: 1em;
-    background-image: url(../img/svg/tableColumnsSolid.svg);
+    background-image: url(../img/svg/table.svg);
 }
 
 .boxSelect .boxMenu{
@@ -295,7 +268,6 @@ table .colTexto a{
     outline: none;
 }
 
-/* From uiverse.io by @barisdogansutcu */
 .download-button {
     position: relative;
     border-width: 0;
@@ -305,6 +277,7 @@ table .colTexto a{
     border-radius: 4px;
     padding: 0;
     z-index: 1;
+    margin-top: .5em;
    }
    
    .download-button .docs {

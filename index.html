@@ -18,7 +18,10 @@
     <title>Extrair dados XML</title>
   </head>
   <body>
-    <input type="file" id="files" name="files[]" multiple />
+    <div class="boxInput">
+      <label for="files">
+        <input type="file" id="files" name="files[]" multiple /><a>CLIQUE OU ARRASTE O XML</a></label>
+    </div>
     <h2>Notas Fiscais</h2>
     <div class="boxSelect" id="boxSelectForTableNotas">
       <div class="icon_col"></div>
@@ -26,6 +29,7 @@
     </div>
     <table id="notasFiscais">
       <tr>
+        <th style="min-width: 10em; display: none;"><a>STATUS</a></th>
         <th style="min-width: 10em;"><a>CNPJ</a></th>
         <th style="min-width: 20em;"><a>NOME</a></th>
         <th style="min-width: 10em;"><a>IE</a></th>
@@ -48,6 +52,7 @@
         <th style="min-width: 10em;"><a>VALOR PAGO</a></th>
       </tr>
       <tr id="modeloLinha" class="linha" style="display: none;">
+        <td style="display: none;"><a class="status"></a></td>
         <td><a class="cnpj"></a></td>
         <td><a class="nome"></a></td>
         <td><a class="ie"></a></td>

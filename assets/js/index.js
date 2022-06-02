@@ -128,9 +128,11 @@ function handleFileSelect(evt) {
           let detalhesPagamento = xmlDoc.getElementsByTagName("detPag")[0]
           let indPagtext = ''; let tPagtext = '';
 
-          if(!!detalhesPagamento.getElementsByTagName("indPag")[0]){
-            indPagtext = indPag(detalhesPagamento.getElementsByTagName("indPag")[0].textContent)
-            tPagtext = tPag(detalhesPagamento.getElementsByTagName("tPag")[0].textContent),detalhesPagamento.getElementsByTagName("tPag")[0].textContent
+          if(!!detalhesPagamento){
+            if(!!detalhesPagamento.getElementsByTagName("indPag")[0]){
+              indPagtext = indPag(detalhesPagamento.getElementsByTagName("indPag")[0].textContent)
+              tPagtext = tPag(detalhesPagamento.getElementsByTagName("tPag")[0].textContent),detalhesPagamento.getElementsByTagName("tPag")[0].textContent
+            }
           }
 
           let vol = xmlDoc.getElementsByTagName("vol")[0]
@@ -143,7 +145,11 @@ function handleFileSelect(evt) {
           }
 
           var valorNota = xmlDoc.getElementsByTagName("vNF")[0].textContent;
-          var valorPago = xmlDoc.getElementsByTagName("vPag")[0].textContent;
+          var valorPago = ''
+          
+          if(!!xmlDoc.getElementsByTagName("vPag")[0]){
+            valorPago = xmlDoc.getElementsByTagName("vPag")[0].textContent
+          };
 
           clone.querySelector('.cnpj').innerHTML = cnpj;
           clone.querySelector('.nome').innerHTML = nome;
@@ -184,6 +190,7 @@ function handleFileSelect(evt) {
           
           for(let row of rows){
             if(nota == row.dataset.nf){
+              row.querySelector('.status').innerHTML = "C";
               row.style.textDecoration = "line-through"
             }
           }
@@ -256,15 +263,17 @@ let btnMenu = (element) => {
 }
 let test = document.querySelectorAll('.boxMenu.canceladas')[0].childNodes
 document.addEventListener('mouseup', (e) => {
-  let linha = false
+  let linha = false, boxSelectForCanceladas = document.querySelector('#boxSelectForCanceladas')
   for(let a of document.querySelector('.boxMenu').querySelectorAll('a')){
     if(a === e.target) linha = true
   }
   for(let a of document.querySelectorAll('.boxMenu.canceladas')[0].childNodes){
     if(a === e.target) linha = true
   }
-  if(document.querySelectorAll('.icon_col') !== e.target && document.querySelectorAll('.boxMenu') !== e.target && document.querySelector('.boxMenu').style.display !== 'none' || document.querySelectorAll('.boxMenu.canceladas')[0].style.display !== 'none' && !linha){
+  if(document.querySelector('.icon_col') !== e.target && document.querySelectorAll('.boxMenu') !== e.target && document.querySelector('.boxMenu').style.display !== 'none' && !linha){
     document.querySelector('.boxMenu').style.display = 'none';
+  }
+  if(boxSelectForCanceladas.querySelector('.icon_col') !== e.target && document.querySelectorAll('.boxMenu.canceladas') !== e.target && document.querySelector('.boxMenu.canceladas').style.display !== 'none' && !linha){
     document.querySelectorAll('.boxMenu.canceladas')[0].style.display = 'none'
   }
 });
