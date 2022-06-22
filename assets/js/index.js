@@ -64,6 +64,11 @@ function handleFileSelect(evt) {
           clone.removeAttribute('style');
           tabNotas.querySelector('tbody').appendChild(clone)
 
+          let natOp = "";
+          if(!!xmlDoc.getElementsByTagName("natOp")[0]){
+            natOp = xmlDoc.getElementsByTagName("natOp")[0].textContent;
+          }
+
           let dataEmi = "";
           if(!!xmlDoc.getElementsByTagName("dhEmi")[0]){
             dataEmi = xmlDoc.getElementsByTagName("dhEmi")[0].textContent;
@@ -151,6 +156,7 @@ function handleFileSelect(evt) {
             valorPago = xmlDoc.getElementsByTagName("vPag")[0].textContent
           };
 
+          clone.querySelector('.natOp').innerHTML = natOp;
           clone.querySelector('.cnpj').innerHTML = cnpj;
           clone.querySelector('.nome').innerHTML = nome;
           clone.querySelector('.ie').innerHTML = ie;
@@ -163,11 +169,11 @@ function handleFileSelect(evt) {
           clone.querySelector('.uf').innerHTML = uf;
           clone.querySelector('.numero').innerHTML = nNF;
 
-          clone.querySelector('.dataEmi').innerHTML = dateTimeToUTC(dataEmi);
-          clone.querySelector('.dataSai').innerHTML = dateTimeToUTC(dataSai);
+          clone.querySelector('.dataEmi').innerHTML = dataEmi;
+          clone.querySelector('.dataSai').innerHTML = dataSai;
 
-          clone.querySelector('.valorNota').innerHTML = FloatToMoeda(valorNota);
-          clone.querySelector('.valorPago').innerHTML = FloatToMoeda(valorPago);
+          clone.querySelector('.valorNota').innerHTML = valorNota;
+          clone.querySelector('.valorPago').innerHTML = valorPago;
 
           clone.querySelector('.qVol').innerHTML = qVol;
           clone.querySelector('.esp').innerHTML = esp;
@@ -338,21 +344,14 @@ let slide = tabela =>{
 slide(tabNotas)
 slide(tabCanceladas)
 
-function ExportToExcel(type, fn, dl) {
-  var wb = XLSX.utils.table_to_book(tabela, { sheet: "sheet1" });
-  return dl ?
-      XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
-      XLSX.writeFile(wb, fn || ('MySheetName.' + (type || 'xlsx')));
-}
-
 let buttons = document.querySelectorAll('button');
 for(let button of buttons){
   button.addEventListener('click', (element) => {
     function ExportToExcel(type, fn, dl) {
-    var wb = XLSX.utils.table_to_book(button.previousElementSibling, { sheet: "sheet1" });
+    var wb = XLSX.utils.table_to_book(button.previousElementSibling, { sheet: "planilha1" });
     return dl ?
         XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
-        XLSX.writeFile(wb, fn || ('MySheetName.' + (type || 'xlsx')));
+        XLSX.writeFile(wb, fn || ('NFes.' + (type || 'xlsx')));
   } ExportToExcel('xlsx')
   });
 }
