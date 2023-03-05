@@ -9,6 +9,10 @@ let boxSelectCanceladas = document.querySelector('#boxSelectForCanceladas');
 let modeloLinhaNota = tabNotas.querySelector('#modeloLinha');
 let modeloLinhaCancela = tabCanceladas.querySelector('#modeloLinha');
 
+let valorFinal = 0
+
+var meuSet = new Set();
+
 let atualizarTotal = (valor,local) =>{
   local.innerHTML = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
@@ -44,6 +48,8 @@ let dateTimeToUTC = date =>{
     return data.toLocaleString('pt-BR', { timeZone: 'UTC' }).replace(/(\d*)\/(\d*)\/(\d*)\s(\d*):(\d*):(\d*).*/, '$1/$2/$3 $4:$5:$6');
 }
 
+let valor = 0
+
 function handleFileSelect(evt) {
   var files = evt.target.files;
 
@@ -64,14 +70,14 @@ function handleFileSelect(evt) {
           clone.removeAttribute('style');
           tabNotas.querySelector('tbody').appendChild(clone)
 
-          let natOp = "";
-          if(!!xmlDoc.getElementsByTagName("natOp")[0]){
-            natOp = xmlDoc.getElementsByTagName("natOp")[0].textContent;
-          }
-
           let dataEmi = "";
           if(!!xmlDoc.getElementsByTagName("dhEmi")[0]){
             dataEmi = xmlDoc.getElementsByTagName("dhEmi")[0].textContent;
+          }
+
+          let natOp = '';
+          if(!!xmlDoc.getElementsByTagName("natOp")[0]){
+            natOp = xmlDoc.getElementsByTagName("natOp")[0].textContent
           }
             
           let dataSai = "";
@@ -126,10 +132,6 @@ function handleFileSelect(evt) {
 
           nNF = nNF.replace(/^(\d{3})(\d{3})(\d{3})/, "$1.$2.$3")
 
-          let produto = []
-          for(let det of xmlDoc.getElementsByTagName("det"))
-          produto.push(`${det.getElementsByTagName("cProd")[0].textContent} ${det.getElementsByTagName("xProd")[0].textContent} ${det.getElementsByTagName("qCom")[0].textContent}; `)
-
           let detalhesPagamento = xmlDoc.getElementsByTagName("detPag")[0]
           let indPagtext = ''; let tPagtext = '';
 
@@ -150,12 +152,31 @@ function handleFileSelect(evt) {
           }
 
           var valorNota = xmlDoc.getElementsByTagName("vNF")[0].textContent;
-          var valorPago = ''
-          
-          if(!!xmlDoc.getElementsByTagName("vPag")[0]){
-            valorPago = xmlDoc.getElementsByTagName("vPag")[0].textContent
-          };
 
+          var valorContabel = 0;
+
+          let produto = []
+          if(natOp.includes("Venda de producao") || natOp.includes("Venda prod")) valorContabel = valorNota;
+
+          for(let det of xmlDoc.getElementsByTagName("det")){
+            if(natOp.includes("Venda de producao") || natOp.includes("Venda prod")){
+              if((det.getElementsByTagName("CFOP")[0].textContent == "6910" || det.getElementsByTagName("CFOP")[0].textContent == "5910" || det.getElementsByTagName("CFOP")[0].textContent == "6911" || det.getElementsByTagName("CFOP")[0].textContent == "5911")){
+                
+              valorContabel = (valorContabel - (
+                                                  parseFloat(det.getElementsByTagName("vProd")[0].textContent) +
+                                                  parseFloat(det.getElementsByTagName("vCOFINS")[0].textContent) +
+                                                  parseFloat(det.getElementsByTagName("vPIS")[0].textContent) +
+                                                  parseFloat(det.getElementsByTagName("vIPI")[0].textContent) + 
+                                                  (!det.getElementsByTagName("vICMSST")[0] ? 0 : parseFloat(det.getElementsByTagName("vICMSST")[0].textContent))
+                                                )
+                                ).toFixed(2)
+              }
+            }
+            produto.push(`${det.getElementsByTagName("cProd")[0].textContent} ${det.getElementsByTagName("xProd")[0].textContent} ${det.getElementsByTagName("qCom")[0].textContent}; `)
+          }
+
+          valor += +valorContabel
+          document.querySelector('.valorTotal').innerText = (valor).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
           clone.querySelector('.natOp').innerHTML = natOp;
           clone.querySelector('.cnpj').innerHTML = cnpj;
           clone.querySelector('.nome').innerHTML = nome;
@@ -173,7 +194,7 @@ function handleFileSelect(evt) {
           clone.querySelector('.dataSai').innerHTML = dataSai;
 
           clone.querySelector('.valorNota').innerHTML = valorNota;
-          clone.querySelector('.valorPago').innerHTML = valorPago;
+          clone.querySelector('.valorContabel').innerHTML = valorContabel;
 
           clone.querySelector('.qVol').innerHTML = qVol;
           clone.querySelector('.esp').innerHTML = esp;
@@ -185,7 +206,12 @@ function handleFileSelect(evt) {
         }else if(!!xmlDoc.getElementsByTagName("procEventoNFe")[0]){
 
           let IDEvento = xmlDoc.getElementsByTagName("infEvento")[0].getAttributeNode("Id").value.replace("ID","");
-          let CNPJ = xmlDoc.getElementsByTagName("CNPJDest")[0].textContent.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+
+          let CNPJ = "";
+          if(!!xmlDoc.getElementsByTagName("CNPJDest")[0]){
+            CNPJ = xmlDoc.getElementsByTagName("CNPJDest")[0].textContent.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+          }
+
           let dhEvento = dateTimeToUTC(xmlDoc.getElementsByTagName("dhEvento")[0].textContent);
           let nProt = xmlDoc.getElementsByTagName("nProt")[0].textContent;
           let xJust = xmlDoc.getElementsByTagName("xJust")[0].textContent;
@@ -220,6 +246,7 @@ function handleFileSelect(evt) {
     reader.readAsText(f);
   }
 }
+
 
 document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
@@ -286,13 +313,12 @@ document.addEventListener('mouseup', (e) => {
 
 let ShowHideCol = (element,tabela) => {
   for(let linha of element.querySelectorAll('.linha')){
-    linha.addEventListener('click', (element) => {
-      element = element.path[0]
-      visibleHidden(tabela.querySelectorAll('th')[element.dataset.ordem]);
-      for(let col of tabela.querySelectorAll(`td:nth-child(${Number(element.dataset.ordem) + 1})`)){
+    linha.addEventListener('click', () => {
+      visibleHidden(tabela.querySelectorAll('th')[linha.dataset.ordem]);
+      for(let col of tabela.querySelectorAll(`td:nth-child(${Number(linha.dataset.ordem) + 1})`)){
         visibleHidden(col);
       }
-      removeAddClass(element,"ativo")
+      removeAddClass(linha,"ativo")
     });
   }
 }
@@ -344,14 +370,21 @@ let slide = tabela =>{
 slide(tabNotas)
 slide(tabCanceladas)
 
+function ExportToExcel(type, fn, dl) {
+  var wb = XLSX.utils.table_to_book(tabela, { sheet: "sheet1" });
+  return dl ?
+      XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+      XLSX.writeFile(wb, fn || ('MySheetName.' + (type || 'xlsx')));
+}
+
 let buttons = document.querySelectorAll('button');
 for(let button of buttons){
   button.addEventListener('click', (element) => {
     function ExportToExcel(type, fn, dl) {
-    var wb = XLSX.utils.table_to_book(button.previousElementSibling, { sheet: "planilha1" });
+    var wb = XLSX.utils.table_to_book(button.previousElementSibling, { sheet: "sheet1" });
     return dl ?
         XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
-        XLSX.writeFile(wb, fn || ('NFes.' + (type || 'xlsx')));
+        XLSX.writeFile(wb, fn || ('MySheetName.' + (type || 'xlsx')));
   } ExportToExcel('xlsx')
   });
 }
