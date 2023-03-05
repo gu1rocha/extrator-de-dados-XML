@@ -23,6 +23,7 @@
         <input type="file" id="files" name="files[]" multiple /><a>CLIQUE OU ARRASTE O XML</a></label>
     </div>
     <h2>Notas Fiscais</h2>
+    <div class="total" style="text-align: end; font-weight: bold; display: flex; justify-content: flex-end; gap: 0.25rem;">Valor total = <div class="valorTotal">R$ 0,00</div></div>
     <div class="boxSelect" id="boxSelectForTableNotas">
       <div class="icon_col"></div>
       <div class="boxMenu" style="display: none;"></div>
@@ -30,7 +31,7 @@
     <table id="notasFiscais">
       <tr>
         <th style="min-width: 10em; display: none;"><a>STATUS</a></th>
-        <th style="min-width: 10em;"><a>NATUREZA DA OPERAÇÃO</a></th>
+        <th style="min-width: 10em;"><a>TIPO</a></th>
         <th style="min-width: 10em;"><a>CNPJ</a></th>
         <th style="min-width: 20em;"><a>NOME</a></th>
         <th style="min-width: 10em;"><a>IE</a></th>
@@ -50,7 +51,7 @@
         <th style="min-width: 10em;"><a>INDICADOR FORMA PAGAMENTO</a></th>
         <th style="min-width: 10em;"><a>MEIO PAGAMENTO</a></th>
         <th style="min-width: 10em;"><a>VALOR NOTA</a></th>
-        <th style="min-width: 10em;"><a>VALOR PAGO</a></th>
+        <th style="min-width: 10em;"><a>VALOR CONTABEL</a></th>
       </tr>
       <tr id="modeloLinha" class="linha" style="display: none;">
         <td style="display: none;"><a class="status"></a></td>
@@ -74,7 +75,7 @@
         <td><a class="indPag"></a></td>
         <td><a class="tPag"></a></td>
         <td><a class="valorNota"></a></td>
-        <td><a class="valorPago"></a></td>
+        <td><a class="valorContabel"></a></td>
       </tr>
     </table>
     <button class="download-button">
