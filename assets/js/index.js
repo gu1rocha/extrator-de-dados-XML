@@ -156,7 +156,7 @@ function handleFileSelect(evt) {
           var valorContabel = 0;
 
           let produto = []
-          if(natOp.includes("Venda de producao") || natOp.includes("Venda prod")) valorContabel = valorNota;
+          if(natOp.includes("Venda de producao") || natOp.includes("Venda prod") || natOp.includes("Nota Fiscal  Complementar")) valorContabel = valorNota;
 
           for(let det of xmlDoc.getElementsByTagName("det")){
             if(natOp.includes("Venda de producao") || natOp.includes("Venda prod")){
